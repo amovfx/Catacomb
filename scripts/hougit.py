@@ -4,14 +4,26 @@
 import os
 import hou
 
-def gitAdd():
+print "loading hougit"
 
-    cmd = "git add {}".format(hou.hipFile.path())
+def gitAdd(filepath):
+
+    cmd = "git add {}".format(filepath)
     print cmd
     os.system(cmd)
 
 def gitCommit():
 
+    success, msg = hou.ui.readInput("Commit message", buttons=('OK',))
+    print success, msg
+    if (success == 0) and (len(msg) > 0):
+        print "Commiting"
+        cmd = "git commit -m {}".format("\""+ msg + "\"")
+        os.system(cmd)
+
+def gitCommitOTL(node):
+
+    gitAdd(node.type().definition().libraryFilePath())
     success, msg = hou.ui.readInput("Commit message", buttons=('OK',))
     print success, msg
     if (success == 0) and (len(msg) > 0):
